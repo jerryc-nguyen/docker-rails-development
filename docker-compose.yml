@@ -1,0 +1,33 @@
+version: '2'
+
+services:
+  creator:
+    build:
+      context: .
+      dockerfile: creator.Dockerfile
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/app
+
+  web1:
+    build:
+      context: ./rails_app_1
+      dockerfile: dev.Dockerfile
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env.development
+    volumes:
+      - .:/app
+
+  web2:
+    build:
+      context: ./rails_app_2
+      dockerfile: dev.Dockerfile
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env.development
+    volumes:
+      - .:/app
