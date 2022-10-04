@@ -16,18 +16,30 @@ services:
       dockerfile: dev.Dockerfile
     ports:
       - '3000:3000'
+    command: 'bundle exec puma -C config/puma.rb config.ru && bundle exec rake log:clear'
     env_file:
       - .env.development
     volumes:
-      - .:/app
+      - ./rails_app_1:/app
 
   web2:
     build:
       context: ./rails_app_2
       dockerfile: dev.Dockerfile
     ports:
-      - '3000:3000'
+      - '3001:3000'
     env_file:
       - .env.development
     volumes:
-      - .:/app
+      - ./rails_app_2:/app
+
+  web3:
+    build:
+      context: ./rails_app_3
+      dockerfile: dev.Dockerfile
+    ports:
+      - '3002:3000'
+    env_file:
+      - .env.development
+    volumes:
+      - ./rails_app_3:/app
