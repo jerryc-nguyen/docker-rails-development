@@ -22,3 +22,6 @@ RUN bundle install
 COPY . $APP_HOME
 
 EXPOSE 3000
+
+# Run our app
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb", "config.ru"]
