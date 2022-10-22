@@ -43,3 +43,70 @@ services:
       - .env.development
     volumes:
       - ./rails_app_3:/app
+
+  pg:
+    restart: always
+    image: postgres:12.1
+    container_name: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - './postgres:/var/lib/postgresql/data'
+    env_file:
+      - .env.development
+
+  # https://kb.objectrocket.com/redis/run-redis-with-docker-compose-1055
+  redis:
+    restart: always
+    image: redis:6.0-alpine
+    container_name: redis
+    ports:
+      - 6379:6379
+    volumes:
+      - './redis:/data'
+      - './redis.conf:/usr/local/etc/redis/redis.conf'
+
+  # https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
+  # https://www.docker.elastic.co/r/elasticsearch?limit=50&offset=50&show_snapshots=false&ordering=created_at
+  es5:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.0
+    container_name: elasticsearch_5.6
+    environment:
+      - node.name=elasticsearch5
+      - cluster.name=elasticsearch5
+      - bootstrap.memory_lock=true
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+      - xpack.security.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - './elasticsearch5:/usr/share/elasticsearch/data'
+    ports:
+      - 9200:9200
+
+  es7:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
+    container_name: elasticsearch_7.15
+    environment:
+      - node.name=elasticsearch7
+      - cluster.name=elasticsearch7
+      - bootstrap.memory_lock=true
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+      - cluster.initial_master_nodes=elasticsearch7
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - './elasticsearch7:/usr/share/elasticsearch/data'
+    ports:
+      - 9500:9200
+
+  mailcatcher:
+    container_name: mailcatcher
+    image: schickling/mailcatcher
+    ports:
+      - '1025:1025'
+      - '1080:1080'
