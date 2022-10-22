@@ -40,7 +40,6 @@ docker compose run --rm web1 rails c
 ##### Notes:
 
 ```
-when run this command, docker will start new container to run the project.
-So flag `--rm` used to remove the container when we exit rails console.
-And sometime we want to fix some cache class/object issue then we can start new rails console session. If not have this flag, docker will start many container to host our code each time we ran the command.
+Each time you run this command, docker will start new container to run the project.
+Use flag `--rm` to remove the container when we exit the rails console session to prevent ghost container.
 ```
